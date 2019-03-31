@@ -6,21 +6,31 @@ const {
 
 const processSignUpInfo = require('../../hooks/process-sign-up-info');
 
-const separateManager = require('../../hooks/separate-manager');
+const userManipulatePermission = require('../../hooks/user-manipulate-permission');
 
 module.exports = {
   before: {
-    all: [separateManager()],
-    find: [ authenticate('jwt') ],
-    get: [ authenticate('jwt') ],
-    create: [hashPassword(), processSignUpInfo()],
-    update: [ hashPassword(),  authenticate('jwt') ],
-    patch: [ hashPassword(),  authenticate('jwt') ],
-    remove: [ authenticate('jwt') ]
+    all: [],
+    find: [ authenticate('jwt'),
+      userManipulatePermission() ],
+    get: [ authenticate('jwt'),
+      userManipulatePermission() ],
+    create: [ hashPassword(),
+      processSignUpInfo() ],
+    update: [ hashPassword(),
+      authenticate('jwt'),
+      userManipulatePermission(),
+      processSignUpInfo() ],
+    patch: [ hashPassword(),
+      authenticate('jwt'),
+      userManipulatePermission(),
+      processSignUpInfo() ],
+    remove: [ authenticate('jwt'),
+      userManipulatePermission() ]
   },
 
   after: {
-    all: [ 
+    all: [
       // Make sure the password field is never sent to the client
       // Always must be the last hook
       protect('password')

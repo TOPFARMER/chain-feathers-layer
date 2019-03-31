@@ -1,5 +1,11 @@
 // Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+// For more userInformation on hooks see: http://docs.feathersjs.com/api/hooks.html
+
+const ROLES = {
+  student: 'student',
+  teacher: 'teacher',
+  visitor: 'visitor'
+};
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -23,14 +29,23 @@ module.exports = function (options = {}) {
     }
 
     // check role
-    if(!data.role) {
-      throw new Error('You must specify your role, student or teacher.');
+    if(typeof(data.role) === 'string') {
+      switch(data.role) {
+      case ROLES.student :
+      case ROLES.teacher :
+      case ROLES.visitor :
+        break;
+      default :
+        throw new Error('You must specify your role：student，teacher or visitor.');
+      }
+    } else {
+      throw new Error('You role is invalid.');
     }
 
     if(data.role !== 'student' && data.role !== 'teacher') {
       throw new Error('Your role is invalid.');
     } else if (data.role === 'student') {
-      // check info
+      // check userInfo
       // check name
 
       // check sex
@@ -70,15 +85,15 @@ module.exports = function (options = {}) {
       password: data.password,
       publicKey: data.publicKey,
       role: data.role,
-      info: {
-        name: data.info.name,
-        sex: data.info.sex,
-        tel: data.info.tel,
-        institution: data.info.institution,
-        faculty: data.info.faculty,
-        grade: data.info.grade,
-        class: data.info.class,
-        resume: data.info.resume
+      userInfo: {
+        name: data.userInfo.name,
+        sex: data.userInfo.sex,
+        tel: data.userInfo.tel,
+        institution: data.userInfo.institution,
+        faculty: data.userInfo.faculty,
+        grade: data.userInfo.grade,
+        class: data.userInfo.class,
+        resume: data.userInfo.resume
       }
     };
 
@@ -93,7 +108,7 @@ module.exports = function (options = {}) {
 //   "password": "secret",
 //   "role": "teacher",
 //   "publicKey": "foo_address",
-//   "info": {
+//   "userInfo": {
 //     "name": "{ type: String }",
 //     "sex": "{ type: String }",
 //     "tel": "{ type: String }",

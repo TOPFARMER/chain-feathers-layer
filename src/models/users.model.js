@@ -9,8 +9,8 @@ module.exports = function (app) {
     email: {type: String, unique: true, lowercase: true},
     password: { type: String },
     role: { type: String },
-    publicKey: {type: String, unique: true},
-    info: {
+    publicKey: {type: String, unique: true, sparse:true},
+    userinfo: {
       name: { type: String },
       sex: { type: String },
       tel: { type: String },
@@ -18,7 +18,7 @@ module.exports = function (app) {
       faculty: { type: String },
       grade: { type: Number },
       class: { type: Number },
-      resume: {type: String }
+      resume: { type: String }
     },
 
   }, {
