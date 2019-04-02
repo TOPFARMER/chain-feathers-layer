@@ -1,13 +1,15 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
+const verifySignature = require('../../hooks/verify-signature');
+
 module.exports = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [ authenticate('jwt') ],
-    update: [ authenticate('jwt') ],
-    patch: [ authenticate('jwt') ],
+    create: [authenticate('jwt'), verifySignature()],
+    update: [authenticate('jwt'), verifySignature()],
+    patch: [authenticate('jwt'), verifySignature()],
     remove: [ authenticate('jwt') ]
   },
 

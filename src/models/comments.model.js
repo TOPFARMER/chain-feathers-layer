@@ -6,14 +6,17 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const comments = new Schema({
-    account: { type: String, required: true },
-    accessment: { type: String, required: true }, // 为JSON/TEXT格式，可直接hash
-    signature: {
-      r: { type: String, required: true },
-      s: { type: String, required: true },
-      recoveryParam: { type: Number, required: true },
+    metadata: {
+      accountAddr: { type: String, required: true },
+      signature: {
+        r: { type: String, required: true },
+        s: { type: String, required: true },
+        recoveryParam: { type: Number, required: true },
+        required: true
+      },
       required: true
-    }
+    },
+    accessment: { type: String, required: true }, // 为JSON/TEXT格式，可直接hash
   }, {
     timestamps: true
   });
