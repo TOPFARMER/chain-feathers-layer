@@ -11,22 +11,28 @@ const userManipulatePermission = require('../../hooks/user-manipulate-permission
 module.exports = {
   before: {
     all: [],
-    find: [ authenticate('jwt'),
-      userManipulatePermission() ],
-    get: [ authenticate('jwt'),
-      userManipulatePermission() ],
-    create: [ hashPassword(),
-      processSignUpInfo() ],
-    update: [ hashPassword(),
+    find: [],
+    get: [],
+    create: [
+      hashPassword(),
+      processSignUpInfo()
+    ],
+    update: [
+      hashPassword(),
       authenticate('jwt'),
       userManipulatePermission(),
-      processSignUpInfo() ],
-    patch: [ hashPassword(),
+      processSignUpInfo()
+    ],
+    patch: [
+      hashPassword(),
       authenticate('jwt'),
       userManipulatePermission(),
-      processSignUpInfo() ],
-    remove: [ authenticate('jwt'),
-      userManipulatePermission() ]
+      processSignUpInfo()
+    ],
+    remove: [
+      authenticate('jwt'),
+      userManipulatePermission()
+    ]
   },
 
   after: {
