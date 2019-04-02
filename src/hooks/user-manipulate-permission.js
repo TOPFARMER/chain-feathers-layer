@@ -7,7 +7,6 @@ const ROLES = {
   supervisor: 'supervisor',
   student: 'student',
   teacher: 'teacher',
-  visitor: 'visitor'
 };
 
 // 检查用户是否为管理员
@@ -18,7 +17,6 @@ module.exports = function (options = {}) {
   return async context => {
     const user = context.params.user;
     switch(user.role) {     // 区分用户角色
-    case ROLES.visitor :
     case ROLES.student :
     case ROLES.teacher :
     case ROLES.supervisor :

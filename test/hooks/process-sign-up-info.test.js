@@ -11,16 +11,14 @@ describe('\'process-sign-up-info\' hook', () => {
       password: 'secret',
       role: 'student',
       publicKey: 'foo_address',
-      userInfo: {
-        name: '小明',
-        sex: 'male',
-        tel: '13888888888',
-        institution: '广州大学',
-        faculty: '计算机科学与技术',
-        grade: 2018,
-        class: 3,
-        resume: '市优秀三好学生',
-      }
+      name: '小明',
+      sex: 'male',
+      tel: '13888888888',
+      institution: '广州大学',
+      faculty: '计算机科学与技术',
+      grade: 2018,
+      class: 3,
+      intro: '市优秀三好学生',
     };
 
     app.use('/users', {
@@ -39,10 +37,10 @@ describe('\'process-sign-up-info\' hook', () => {
   it('clean the additional sign up info as expected', async () => {
     expect.assertions(2);
     validData.additional = 'whatever';
-    validData.userInfo.additional = 'whatever';
+    validData.additional = 'whatever';
     const result = await app.service('users').create(validData);
     expect(result.additional).toBeUndefined();
-    expect(result.userInfo.additional).toBeUndefined();
+    expect(result.additional).toBeUndefined();
   });
 
   describe('handle blank data fields as expected', () => {

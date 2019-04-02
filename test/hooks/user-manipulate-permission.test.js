@@ -21,7 +21,7 @@ describe('\'user-manipulate-permission\' hook', () => {
         faculty: '计算机科学与技术',
         grade: 2018,
         class: 3,
-        resume: '市优秀三好学生',
+        intro: '市优秀三好学生',
       }
     };
     params = {

@@ -4,9 +4,9 @@
 const ROLES = {
   student: 'student',
   teacher: 'teacher',
-  visitor: 'visitor'
 };
 
+// TODO 检查注册信息
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
   return async context => {
@@ -33,7 +33,6 @@ module.exports = function (options = {}) {
       switch(data.role) {
       case ROLES.student :
       case ROLES.teacher :
-      case ROLES.visitor :
         break;
       default :
         throw new Error('You must specify your role：student，teacher or visitor.');
@@ -42,42 +41,40 @@ module.exports = function (options = {}) {
       throw new Error('You role is invalid.');
     }
 
+    // check userInfo
+    // check name
+    if(!data.name) {
+      throw new Error('You must input your name.');
+    } else {
+      // TODO 正则式检查
+    }
+
+    // check telephone number
+
+    if(data.sex !== 'male' && data.sex !== 'female') {
+      throw new Error('You must specify your sex.');
+    }
+
+    // TODO 院校检查
+    // 逻辑：数据库中存储院校名，查询后匹配
+    // check institution
+
+    // check faculty
+
+
     if(data.role !== 'student' && data.role !== 'teacher') {
       throw new Error('Your role is invalid.');
     } else if (data.role === 'student') {
-      // check userInfo
-      // check name
-
-      // check sex
-
-      // check telephone number
-
-      // check institution
-
-      // check faculty
-
       // check grade
 
       // check class
 
-      // check resume
     } else {
       // teachers have no grade and class
       data.grade = 0;
       data.class = 0;
-
-      // check name
-
-      // check sex
-
-      // check telephone number
-
-      // check institution
-
-      // check faculty
-
-      // check resume
     }
+
 
     // Override the original data (so that people can't submit additional stuff)
     context.data = {
@@ -85,16 +82,15 @@ module.exports = function (options = {}) {
       password: data.password,
       publicKey: data.publicKey,
       role: data.role,
-      userInfo: {
-        name: data.userInfo.name,
-        sex: data.userInfo.sex,
-        tel: data.userInfo.tel,
-        institution: data.userInfo.institution,
-        faculty: data.userInfo.faculty,
-        grade: data.userInfo.grade,
-        class: data.userInfo.class,
-        resume: data.userInfo.resume
-      }
+      name: data.name,
+      sex: data.sex,
+      tel: data.tel,
+      institution: data.institution,
+      faculty: data.faculty,
+      grade: data.grade,
+      class: data.class,
+      // Messages can't be longer than 400 characters
+      intro: data.intro.substring(0, 400)
     };
 
     return context;
@@ -116,6 +112,6 @@ module.exports = function (options = {}) {
 //     "faculty": "{ type: String }",
 //     "grade": 2018,
 //     "class": 3,
-//     "resume": "{type: String }"
+//     "intro": "{type: String }"
 //   }
 // }
