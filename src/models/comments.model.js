@@ -6,6 +6,7 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const comments = new mongooseClient.Schema({
     metadata: {
+      signatory: { type: String, required: true },
       commitAddr: { type: String, required: true },
       signature: {
         r: { type: String, required: true },
@@ -13,7 +14,7 @@ module.exports = function (app) {
         recoveryParam: { type: Number, required: true }
       }
     },
-    contents: [{ _id: false, accessment: String, commitAddr: String, receiveAddr: String }], // 为JSON/TEXT格式，可直接hash
+    accessments: [{ _id: false, accessment: String, commitAddr: String, receiveAddr: String }], // 为JSON/TEXT格式，可直接hash
   }, {
     timestamps: true
   });
