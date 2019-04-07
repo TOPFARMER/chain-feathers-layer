@@ -1,6 +1,10 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more userInformation on hooks see: http://docs.feathersjs.com/api/hooks.html
 
+// 准备用该库对输入数据验证及清洗
+// express 中间件 xss-filter
+const Validator = require('validator');
+
 const ROLES = {
   student: 'student',
   teacher: 'teacher',
@@ -16,6 +20,10 @@ module.exports = function (options = {}) {
     // check email
     if(!data.email) {
       throw new Error('You must input your email.');
+    } else {
+      if(!Validator.isEmail(data.email)) {
+        throw new Error('You must input your email.');
+      }
     }
 
     // check password
@@ -97,21 +105,3 @@ module.exports = function (options = {}) {
   };
 };
 
-
-// data dictionary
-// {
-//   "email": "test0@example.com",
-//   "password": "secret",
-//   "role": "teacher",
-//   "publicKey": "foo_address",
-//   "userInfo": {
-//     "name": "{ type: String }",
-//     "sex": "{ type: String }",
-//     "tel": "{ type: String }",
-//     "institution": "{ type: String }",
-//     "faculty": "{ type: String }",
-//     "grade": 2018,
-//     "class": 3,
-//     "intro": "{type: String }"
-//   }
-// }

@@ -2,6 +2,9 @@
 
 > a prototype blockchain credential system based on feathersjs
 
+~~default mongo address "mongodb://localhost:27017/feathers_chain"~~
+~~remote connect terminal command: mongo "mongodb+srv://cluster0-wprwf.mongodb.net/test" --username TOPFARMER~~ 
+
 ## About
 
 This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.

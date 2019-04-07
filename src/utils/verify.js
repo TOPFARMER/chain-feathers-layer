@@ -13,7 +13,7 @@ class Verify {
 
   static verifyCommentSignatrue(comment) {
     return ChainUtil.verifySignature(
-      comment.metadata.accountAddr,
+      comment.metadata.commitAddr,
       comment.metadata.signature,
       Verify.hash(comment.contents)
     );

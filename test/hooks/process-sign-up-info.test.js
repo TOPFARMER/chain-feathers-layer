@@ -1,26 +1,11 @@
 const feathers = require('@feathersjs/feathers');
 const processSignUpInfo = require('../../src/hooks/process-sign-up-info');
-
+const { validUserData } = require('../data');
 describe('\'process-sign-up-info\' hook', () => {
-  let app, validData;
+  let app, validUserData;
 
   beforeEach(() => {
     app = feathers();
-    validData = {
-      email: 'test0@example.com',
-      password: 'secret',
-      role: 'student',
-      publicKey: 'foo_address',
-      name: '小明',
-      sex: 'male',
-      tel: '13888888888',
-      institution: '广州大学',
-      faculty: '计算机科学与技术',
-      grade: 2018,
-      class: 3,
-      intro: '市优秀三好学生',
-    };
-
     app.use('/users', {
       async create(data) {
         return data;
@@ -36,9 +21,9 @@ describe('\'process-sign-up-info\' hook', () => {
 
   it('clean the additional sign up info as expected', async () => {
     expect.assertions(2);
-    validData.additional = 'whatever';
-    validData.additional = 'whatever';
-    const result = await app.service('users').create(validData);
+    validUserData.additional = 'whatever';
+    validUserData.additional = 'whatever';
+    const result = await app.service('users').create(validUserData);
     expect(result.additional).toBeUndefined();
     expect(result.additional).toBeUndefined();
   });
@@ -46,7 +31,7 @@ describe('\'process-sign-up-info\' hook', () => {
   describe('handle blank data fields as expected', () => {
     let data;
     beforeEach(() => {
-      data = validData;
+      data = validUserData;
     });
 
     it('case: email is blank', async () => {

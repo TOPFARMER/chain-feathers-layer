@@ -1,6 +1,6 @@
 const feathers = require('@feathersjs/feathers');
 const userManipulatePermission = require('../../src/hooks/user-manipulate-permission');
-
+const { validUserData } = require('../data');
 describe('\'user-manipulate-permission\' hook', () => {
   let app, userList, data, currentId, params;
 
@@ -8,22 +8,7 @@ describe('\'user-manipulate-permission\' hook', () => {
     app = feathers();
     currentId = 0;
     userList = [];
-    data = {
-      email: 'test0@example.com',
-      password: 'secret',
-      role: 'visitor',
-      publicKey: 'foo_address',
-      userInfo: {
-        name: '小明',
-        sex: 'male',
-        tel: '13888888888',
-        institution: '广州大学',
-        faculty: '计算机科学与技术',
-        grade: 2018,
-        class: 3,
-        intro: '市优秀三好学生',
-      }
-    };
+    data = validUserData;
     params = {
       user: Object.assign({
         id: 0,

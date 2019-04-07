@@ -25,11 +25,12 @@ module.exports = function (app) {
     },
     after: {
       create: [
-        context => {
-          context.result.user = context.params.user;
-          // Don't expose sensitive information
-          delete context.result.user.password;
-        }
+        // try not to add users, because it's unnessary
+        // context => {
+        //   context.result.user = context.params.user;
+        //   // Don't expose sensitive information
+        //   delete context.result.user.password;
+        // }
       ]
     }
   });

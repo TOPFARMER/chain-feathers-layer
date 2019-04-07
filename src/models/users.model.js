@@ -9,14 +9,14 @@ module.exports = function (app) {
     password: { type: String },
     role: { type: String },
     publicKey: {type: String, unique: true, sparse:true},
-    name: { type: String },
+    name: { type: String , required: true },
     sex: { type: String },
     tel: { type: String },
     institution: { type: String },
     faculty: { type: String },
     grade: { type: Number },
     class: { type: Number },
-    resume: { type: String }
+    intro: { type: String }
   }, {
     timestamps: true
   });
