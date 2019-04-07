@@ -14,7 +14,7 @@ module.exports = function (app) {
         recoveryParam: { type: Number, required: true }
       }
     },
-    accessments: [{ _id: false, accessment: String, commitAddr: String, receiveAddr: String }], // 为JSON/TEXT格式，可直接hash
+    assessments: [{ _id: false, assessment: String, commitAddr: String, receiveAddr: String }], // 为JSON/TEXT格式，可直接hash
   }, {
     timestamps: true
   });

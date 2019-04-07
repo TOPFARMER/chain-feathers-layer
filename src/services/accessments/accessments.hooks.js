@@ -1,13 +1,19 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
+const { authenticate } = require("@feathersjs/authentication").hooks;
+
+const verifyassessments = require("../../hooks/verify-assessments");
+
+function forbiddenPatch() {     // 禁止部分更新内部状态
+  throw new Error("assessment can not be patched！");
+}
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate("jwt")],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [verifyassessments()],
+    update: [verifyassessments()],
+    patch: [forbiddenPatch()],
     remove: []
   },
 
