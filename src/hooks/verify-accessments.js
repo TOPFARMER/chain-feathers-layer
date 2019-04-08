@@ -30,7 +30,7 @@ module.exports = function(options = {}) {
 
     // 检查HTTP请求用户的角色
     const user = context.params.user;
-    if (user.role !== "teacher" && uesr.role !== "supervisor") {
+    if (user.role !== "teacher" && user.role !== "supervisor") {
       throw new Error("You have no authority to render or sign a assessment.");
     }
 
