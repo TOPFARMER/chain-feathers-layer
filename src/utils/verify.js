@@ -7,15 +7,15 @@ class Verify {
     return SHA256(JSON.stringify(data)).toString();
   }
 
-  static verifySignature(account, signature, dataHash) {
-    return ec.keyFromPublic(account, 'hex').verify(dataHash, signature);
+  static verifySignature(account, signature, datfingerPrint) {
+    return ec.keyFromPublic(account, 'hex').verify(datfingerPrint, signature);
   }
 
-  static verifyCommentSignatrue(comment) {
-    return ChainUtil.verifySignature(
-      comment.metadata.commitAddr,
-      comment.metadata.signature,
-      Verify.hash(comment.contents)
+  static verifyAssessmentSignatrue(assessment) {
+    return this.verifySignature(
+      assessment.publicKey,
+      assessment.signature,
+      assessment.fingerPrint
     );
   }
 }

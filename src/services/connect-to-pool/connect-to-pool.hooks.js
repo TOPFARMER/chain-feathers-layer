@@ -1,16 +1,18 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
-const verifySignature = require('../../hooks/verify-signature');
+const verifySupervisorConfirm = require('../../hooks/verify-supervisor-confirm');
+
+const blockEndpoint = require('../../hooks/block-endpoint');
 
 module.exports = {
   before: {
     all: [],
-    find: [],
-    get: [],
-    create: [authenticate('jwt'), verifySignature()],
-    update: [authenticate('jwt'), verifySignature()],
-    patch: [authenticate('jwt'), verifySignature()],
-    remove: [ authenticate('jwt') ]
+    find: [blockEndpoint()],
+    get: [blockEndpoint()],
+    create: [authenticate('jwt'), verifySupervisorConfirm()],
+    update: [authenticate('jwt'),verifySupervisorConfirm()],
+    patch: [authenticate('jwt'), verifySupervisorConfirm()],
+    remove: [blockEndpoint()]
   },
 
   after: {

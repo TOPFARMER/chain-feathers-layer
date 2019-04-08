@@ -9,7 +9,7 @@ module.exports = function(options = {}) {
     let isSignedByTchr = false;
     let {
       // 准备清洗数据
-      aHash,
+      fingerPrint,
       publicKey,
       teacherName,
       studentName,
@@ -34,6 +34,17 @@ module.exports = function(options = {}) {
       throw new Error("You have no authority to render or sign a assessment.");
     }
 
+    // 检查是否被篡改
+    const currentFingerPrint = Verify.hash({
+      publicKey,
+      teacherName,
+      studentName,
+      contents
+    });
+    if(fingerPrint !== currentFingerPrint) {
+      throw new Error("The data had been tampered");
+    }
+
     // 如果存在签名
     if (context.data.signature) {
       // 用户列表查找该签名publicKey
@@ -55,7 +66,7 @@ module.exports = function(options = {}) {
       }
       // 检查签名有效性
       const assessment = context.data;
-      if (!Verify.verifyassessmentSignatrue(assessment)) {
+      if (!Verify.verifyAssessmentSignatrue(assessment)) {
         throw new Error("Your assessment's signature is invaild.");
       }
       // 数据无误，签名正确
@@ -64,7 +75,7 @@ module.exports = function(options = {}) {
 
     // 数据清洗完毕
     context.data = {
-      aHash,
+      fingerPrint,
       publicKey,
       teacherName,
       studentName,

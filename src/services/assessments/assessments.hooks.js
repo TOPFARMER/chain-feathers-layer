@@ -1,17 +1,17 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
-const verifyassessments = require("../../hooks/verify-assessments");
+const verifyAssessments = require("../../hooks/verify-assessments");
 
-const assessmentCantBePatched = require("../../hooks/assessment-cant-be-patched");
+const blockEndpoint = require("../../hooks/block-endpoint");
 
 module.exports = {
   before: {
     all: [authenticate("jwt")],
     find: [],
     get: [],
-    create: [verifyassessments()],
-    update: [verifyassessments()],
-    patch: [assessmentCantBePatched()],
+    create: [verifyAssessments()],
+    update: [verifyAssessments()],
+    patch: [blockEndpoint()],
     remove: []
   },
 
