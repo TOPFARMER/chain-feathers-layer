@@ -2,9 +2,10 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return async context => {
-    // 禁止部分更新内部状态
-    throw new Error("This endpoint had been blocked!!!");
+
+
+    return context;
   };
 };

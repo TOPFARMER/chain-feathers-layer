@@ -1,7 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
-const Verify = require('../utils/verify')
+const Verify = require('../utils/verify');
 
 // 我们并没有定义supervisor签名后的schema
 // 在此处进行定义
