@@ -8,7 +8,7 @@ const Verify = require('../utils/verify');
 /**
  *
  * signedPackage = new Schema {
- *  fingerPrint: {type: String, required:true},
+ *  hash: {type: String, required:true},
  *  supervisorName: {type: String, required:true},
  *  publicKey: {type: String, required:true},
  *  signature: signature: {

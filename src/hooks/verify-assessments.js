@@ -9,7 +9,7 @@ module.exports = function(options = {}) {
     let isSignedByTchr = false;
     let {
       // 准备清洗数据
-      fingerPrint,
+      hash,
       publicKey,
       teacherName,
       studentName,
@@ -35,13 +35,13 @@ module.exports = function(options = {}) {
     }
 
     // 检查是否被篡改
-    const currentFingerPrint = Verify.hash({
+    const currenthash = Verify.hash({
       publicKey,
       teacherName,
       studentName,
       contents
     });
-    if(fingerPrint !== currentFingerPrint) {
+    if(hash !== currenthash) {
       throw new Error("The data had been tampered");
     }
 
@@ -75,7 +75,7 @@ module.exports = function(options = {}) {
 
     // 数据清洗完毕
     context.data = {
-      fingerPrint,
+      hash,
       publicKey,
       teacherName,
       studentName,

@@ -7,8 +7,8 @@ module.exports = function(app) {
   const { Schema } = mongooseClient;
   const assessments = new Schema(
     {
-      fingerPrint: { type: String, requierd: true },
-      // 必须指出fingerPrint = SHA256({
+      hash: { type: String, requierd: true },
+      // 必须指出hash = SHA256({
       //   publicKey,
       //   teacherName,
       //   studentName,

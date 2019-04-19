@@ -1,5 +1,5 @@
 // Initializes the `blocks` service on path `/blocks`
-const createService = require('feathers-nedb');
+const createService = require('feathers-mongoose');
 const createModel = require('../../models/blocks.model');
 const hooks = require('./blocks.hooks');
 
