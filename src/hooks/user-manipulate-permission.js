@@ -5,7 +5,6 @@ const SKIP = require("@feathersjs/feathers").SKIP;
 const ROLES = {
   admin: "admin",
   supervisor: "supervisor",
-  student: "student",
   teacher: "teacher"
 };
 
@@ -19,7 +18,6 @@ module.exports = function(options = {}) {
     switch (
       user.role // 区分用户角色
     ) {
-      case ROLES.student:
       case ROLES.teacher:
       case ROLES.supervisor:
         switch (

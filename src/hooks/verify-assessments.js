@@ -6,6 +6,25 @@ const Verify = require("../utils/verify");
 // eslint-disable-next-line no-unused-vars
 module.exports = function(options = {}) {
   return async context => {
+    if (context.method === "update") {
+      const queryResult = await context.app.service("assessments").find({
+        query: {
+          _id: context.id
+        }
+      });
+      if (queryResult.total === 0) {
+        throw new Error("This assessments do not exist.");
+      } else {
+        // 审查员签名的评价不可更改
+        const assessment = queryResult.data[0];
+        if (assessment.isSignedBySup) {
+          throw new Error(
+            "This assessment wrriten in blockchian is unchangable."
+          );
+        }
+      }
+    }
+
     let isSignedByTchr = false;
     let {
       // 准备清洗数据
@@ -17,16 +36,9 @@ module.exports = function(options = {}) {
       signature
     } = context.data;
 
-
-    // // 检查评论是否为空
-    // if(!context.data) {
-    //   throw new Error('Your assessment is empty.');
-    // }
-
-    // // 检查评论内容是否为空
-    // if(!context.data.contents || !context.data.contents === []) {
-    //   throw new Error('Your assessment is empty.');
-    // }
+    if (!contents || !studentName) {
+      throw new Error("Can not process empty data");
+    }
 
     // 检查HTTP请求用户的角色
     const user = context.params.user;
@@ -35,24 +47,22 @@ module.exports = function(options = {}) {
     }
 
     // 检查是否被篡改
-    const currenthash = Verify.hash({
+    const currenthash = Verify.hash(
       publicKey,
       teacherName,
       studentName,
       contents
-    });
-    if(hash !== currenthash) {
+    );
+    if (hash !== currenthash) {
       throw new Error("The data had been tampered");
     }
 
     // 如果存在签名
-    if (context.data.signature) {
+    if (signature) {
       // 用户列表查找该签名publicKey
-      const queryResult = context.app.service("users").find({
+      const queryResult = await context.app.service("users").find({
         query: {
-          publicKey: {
-            $in: [user.publicKey]
-          }
+          publicKey: user.publicKey
         }
       });
       if (queryResult.total === 0) {
@@ -60,13 +70,13 @@ module.exports = function(options = {}) {
       } else {
         // 检查实际签名用户的角色
         const user = queryResult.data[0];
-        if (user.role !== "teacher" && uesr.role !== "supervisor") {
+        if (user.role !== "teacher" && user.role !== "supervisor") {
           throw new Error("You have no authority to sign a assessment.");
         }
       }
       // 检查签名有效性
-      const assessment = context.data;
-      if (!Verify.verifyAssessmentSignatrue(assessment)) {
+
+      if (!Verify.verifySignature(publicKey, signature, hash)) {
         throw new Error("Your assessment's signature is invaild.");
       }
       // 数据无误，签名正确

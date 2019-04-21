@@ -20,6 +20,8 @@ const authentication = require('./authentication');
 
 const mongoose = require('./mongoose');
 
+const pbftclient = require('./client');
+
 const app = express(feathers());
 
 // Load app configuration
@@ -53,5 +55,7 @@ app.use(express.notFound());
 app.use(express.errorHandler({ logger }));
 
 app.hooks(appHooks);
+
+app.set('pbftclient', pbftclient);
 
 module.exports = app;

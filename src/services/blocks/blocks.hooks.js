@@ -2,6 +2,7 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const blockEndpoint = require("../../hooks/block-endpoint");
 const consensus = require('../../hooks/consensus');
 const verifySupervisorConfirm = require('../../hooks/verify-supervisor-confirm.js');
+const signedBySupervisor = require('../../hooks/signed-by-supervisor');
 module.exports = {
   before: {
     all: [],
@@ -18,7 +19,7 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [signedBySupervisor()],
     update: [],
     patch: [],
     remove: []

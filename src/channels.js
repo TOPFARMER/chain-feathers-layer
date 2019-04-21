@@ -7,9 +7,7 @@ module.exports = function(app) {
   // eslint-disable-next-line no-console
   app.on("connection", connection => {
     // On a new real-time connection, add it to the anonymous channel
-    console.log(
-      `A visitor request connection to our server. For more details)}`
-    );
+    console.log(`A visitor request connection to our server.`);
     app.channel("anonymous").join(connection);
   });
 

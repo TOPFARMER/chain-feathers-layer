@@ -50,15 +50,11 @@
     "helmet": "^3.16.0",
     "mongodb-core": "^3.2.2",
     "mongoose": "^5.4.20",
-    "nedb": "^1.8.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.86.0",
     "serve-favicon": "^2.5.0",
     "uuid": "^3.3.2",
     "validator": "^10.11.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "nslookup": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^5.15.3",
