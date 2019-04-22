@@ -9,12 +9,19 @@ module.exports = function(options = {}) {
     try {
       let block = null;
       const result = await client.broadcastAndWaitForReply(
-        Protocol.requestMsg(hash, signature, publicKey, assessments, timestamp)
+        JSON.stringify(
+          Protocol.requestMsg(
+            hash,
+            signature,
+            publicKey,
+            assessments,
+            timestamp
+          )
+        )
       );
       const serverNum = client.servers.length;
-      console.log(JSON.stringify(result));
-      const resultStr = result.map(res => JSON.stringify(res));
-      const countObj = resultStr.reduce((count, msg) => {
+      console.log(result);
+      const countObj = result.reduce((count, msg) => {
         msg in count ? count[msg]++ : (count[msg] = 1);
         return count;
       }, {});
