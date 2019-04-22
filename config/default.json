@@ -30,6 +30,5 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb+srv://TOPFARMER:chashao2016@cluster0-wprwf.mongodb.net/feathers-chain",
-  "nedb": "../data"
+  "mongodb": "mongodb://admin:admin@mongodb:27017/feathers-chain"
 }

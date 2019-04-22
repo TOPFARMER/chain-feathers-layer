@@ -53,7 +53,7 @@ class Client {
   async waitingForOpen(socket) {
     return await new Promise((resolve, reject) => {
       socket.onopen = () => {
-        console.log("made it!");
+        console.log("Connected to server");
         resolve(socket);
       };
       socket.onerror = event => {
@@ -71,22 +71,22 @@ class Client {
         );
         this.connectSocket(await this.waitingForOpen(socket), server);
       } catch (err) {
-        console.log(err);
+        console.log(`Error occur when CTS :${err}`);
       }
     }
   }
 
-  async broadcastAndWaitForReply(data) {
+  async broadcastAndWaitForReply(message) {
+    const data = JSON.stringify(message);
     try {
       let result = await Promise.all(
         Object.values(this.sockets).map(socket =>
           this.sendAndWaitForResponse(socket, data, 1000)
         )
       );
-
-      console.log(JSON.stringify(this.countMsgs(result)));
+      return result;
     } catch (err) {
-      console.log(err);
+      console.log(`Error occur when BCAWFR :${err}`);
     }
   }
 
@@ -104,33 +104,33 @@ class Client {
         })
       ]);
     } catch (err) {
-      console.log(err);
+      console.log(`Error occur when SAWFR :${err}`);
     }
   }
 
-  broadcastToServers(data) {
-    for (let ip in this.sockets) {
-      try {
-        this.sockets[ip].send(JSON.stringify(data));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
+  // broadcastToServers(data) {
+  //   for (let ip in this.sockets) {
+  //     try {
+  //       this.sockets[ip].send(JSON.stringify(data));
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }
 
-  async waitForResponse(socket) {
-    try {
-      return await new Promise((resolve, reject) => {
-        socket.onmessage = event => {
-          resolve(event.data);
-        };
+  // async waitForResponse(socket) {
+  //   try {
+  //     return await new Promise((resolve, reject) => {
+  //       socket.onmessage = event => {
+  //         resolve(event.data);
+  //       };
 
-        setTimeout(reject(new Error("timeout to wait for reply")), 10000);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  //       setTimeout(reject(new Error("timeout to wait for reply")), 10000);
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   static sign(data, secret) {
     return CryptoJS.HmacMD5(data, secret).toString();

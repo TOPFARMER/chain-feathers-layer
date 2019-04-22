@@ -1,7 +1,7 @@
 {
   "name": "feathers-chain",
   "description": "a prototype blockchain credential system based on feathersjs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
   "main": "src",
   "keywords": [
@@ -29,9 +29,6 @@
     "start": "node src/",
     "jest": "jest"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.16",
     "@feathersjs/authentication-jwt": "^2.0.10",
@@ -46,7 +43,6 @@
     "crypto-js": "^3.1.9-1",
     "elliptic": "^6.4.1",
     "feathers-mongoose": "^7.3.2",
-    "feathers-nedb": "^4.0.1",
     "helmet": "^3.16.0",
     "mongodb-core": "^3.2.2",
     "mongoose": "^5.4.20",
@@ -55,12 +51,5 @@
     "validator": "^10.11.0",
     "winston": "^3.2.1",
     "nslookup": "^1.1.1"
-  },
-  "devDependencies": {
-    "eslint": "^5.15.3",
-    "jest": "^24.5.0",
-    "nodemon": "^1.18.10",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4"
   }
 }

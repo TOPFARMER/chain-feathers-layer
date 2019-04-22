@@ -6,11 +6,11 @@ const blockEndpoint = require("../../hooks/block-endpoint");
 
 module.exports = {
   before: {
-    all: [authenticate("jwt")],
+    all: [],
     find: [],
     get: [],
-    create: [verifyAssessments()],
-    update: [verifyAssessments()],
+    create: [authenticate("jwt"), verifyAssessments()],
+    update: [authenticate("jwt"), verifyAssessments()],
     patch: [blockEndpoint()],
     remove: []
   },

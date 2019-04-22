@@ -9,18 +9,10 @@ module.exports = function(options = {}) {
     try {
       let block = null;
       const result = await client.broadcastAndWaitForReply(
-        JSON.stringify(
-          Protocol.requestMsg(
-            hash,
-            signature,
-            publicKey,
-            assessments,
-            timestamp
-          )
-        )
+        Protocol.requestMsg(hash, signature, publicKey, assessments, timestamp)
       );
       const serverNum = client.servers.length;
-      console.log(result);
+      console.log(`Result List \n ${result}`);
       const countObj = result.reduce((count, msg) => {
         msg in count ? count[msg]++ : (count[msg] = 1);
         return count;
@@ -28,17 +20,23 @@ module.exports = function(options = {}) {
 
       for (let str in countObj) {
         if (countObj[str] >= Math.ceil((2 / 3) * serverNum)) {
-          console.log(countObj[str]);
-          block = Object.assign({ assessments }, JSON.parse(countObj[str]));
+          console.log(`Consensus: ${countObj[str]} \n ${str}`);
+          const { timestamp, lastHash, hash, height } = JSON.parse(str);
+          block = {
+            timestamp,
+            lastHash,
+            hash,
+            assessments,
+            height
+          };
         }
       }
-      console.log(block);
-      throw new Error("正在施工");
+      if (!block) throw new Error("延时等待一轮视图转换，未实现");
+      context.data = block;
+      return context;
     } catch (err) {
-      console.log(err);
+      console.log(`Error occur when hooks consensus :${err}`);
       throw new Error(err);
     }
-    // console.log(context.data);
-    return context;
   };
 };
