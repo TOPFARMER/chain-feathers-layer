@@ -12,7 +12,7 @@ module.exports = {
     create: [authenticate("jwt"), verifyAssessments()],
     update: [authenticate("jwt"), verifyAssessments()],
     patch: [blockEndpoint()],
-    remove: []
+    remove: [authenticate("jwt"), verifyAssessments()]
   },
 
   after: {

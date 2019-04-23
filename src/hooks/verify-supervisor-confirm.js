@@ -38,8 +38,10 @@ module.exports = function(options = {}) {
     const startTime = Date.now();
     let { hash, publicKey, signature, assessments, timestamp } = context.data;
 
-    if (!assessments) {
-      throw new Error("Assessments can not be empty!");
+    if (!(assessments instanceof Array) || assessments.length === 0) {
+      throw new Error(
+        "Assessments should be a string array and can not be empty!"
+      );
     }
 
     // 检查HTTP请求用户的角色
@@ -78,104 +80,81 @@ module.exports = function(options = {}) {
       throw new Error("Your request's signature is invaild.");
     }
 
-    // 检查每一条评价的哈希值以及签名
-    // const assessmentsArr = JSON.parse(assessments);
-    // assessmentsArr.forEach(async assessment => {
-    //   const queryResult = await context.app.service("users").find({
-    //     query: {
-    //       publicKey: assessment.publicKey
-    //     }
-    //   });
-    //   if (queryResult.total === 0) {
-    //     throw new Error(
-    //       `Public address of assessment: ${assessment._id} is invalid.`
-    //     );
-    //   } else {
-    //     // 检查实际签名用户的角色
-    //     const user = queryResult.data[0];
-    //     if (user.role !== "supervisor" && user.role !== "teacher") {
-    //       throw new Error(`Signer of assessment: ${assessment._id} is invalid`);
-    //     }
-    //   }
-
-    //   // 检查是否被篡改
-    //   const currenthash = Verify.hash(
-    //     assessment.publicKey,
-    //     assessment.teacherName,
-    //     assessment.studentName,
-    //     assessment.contents
-    //   );
-    //   if (hash !== currenthash) {
-    //     throw new Error(
-    //       `Data of assessment: ${assessment._id} had been tampered`
-    //     );
-    //   }
-
-    //   if (!Verify.verifySignature(publicKey, signature, hash)) {
-    //     throw new Error(`Signature of ${assessment._id} is invaild.`);
-    //   }
-    // });
-
     // 检查每一条评价
     const assessmentsArr = JSON.parse(assessments);
-    assessmentsArr.forEach(async assessment => {
-      let queryResult = await context.app.service("assessments").find({
-        query: {
-          _id: assessment._id
-        }
-      });
 
-      // 检查评价是否有冲突
-      if (queryResult.total === 0) {
-        throw new Error(`This assessment: ${assessment._id} is invalid.`);
-      } else {
-        // 检查实际签名用户的角色
-        const assessmentInMongo = queryResult.data[0];
-        if (assessmentInMongo.isSignedBySup) {
+    await Promise.all(
+      assessmentsArr.map(async assessment => {
+        let queryResult = await context.app
+          .service("assessments")
+          ._get(assessment._id);
+
+        // 检查评价是否有冲突
+        if (!queryResult) {
+          throw new Error(`This assessment: ${assessment._id} is not exist.`);
+        } else {
+          // 检查实际签名用户的角色
+          console.log(
+            `We have assessment ${queryResult._id}: signed by sup: ${
+              queryResult.isSignedBySup
+            }`
+          );
+          if (queryResult.isSignedBySup) {
+            throw new Error(
+              `Assessment: ${assessment._id} had been wrapped up in block`
+            );
+          }
+          if (!queryResult.isSignedByTchr) {
+            throw new Error(`Assessment: ${assessment._id} without signature.`);
+          }
+        }
+
+        queryResult = await context.app.service("users").find({
+          query: {
+            publicKey: assessment.publicKey
+          }
+        });
+        if (queryResult.total === 0) {
           throw new Error(
-            `Assessment: ${assessment._id} had been wrapped up in block`
+            `Public address of assessment: ${assessment._id} is invalid.`
+          );
+        } else {
+          // 检查实际签名用户的角色
+          const user = queryResult.data[0];
+          if (user.role !== "supervisor" && user.role !== "teacher") {
+            throw new Error(
+              `Signer of assessment: ${assessment._id} is invalid`
+            );
+          }
+        }
+
+        const {
+          hash,
+          publicKey,
+          teacherName,
+          studentName,
+          contents,
+          signature
+        } = assessment;
+        // 检查是否被篡改
+        const currenthash = Verify.hash(
+          publicKey,
+          teacherName,
+          studentName,
+          contents
+        );
+        if (hash !== currenthash) {
+          throw new Error(
+            `Data of assessment: ${assessment._id} had been tampered`
           );
         }
-        if (!assessmentInMongo.isSignedByTchr) {
-          throw new Error(`Assessment: ${assessment._id} without signature.`);
+        if (!Verify.verifySignature(publicKey, signature, hash)) {
+          throw new Error(`Signature of ${assessment._id} is invaild.`);
         }
-      }
+      })
+    );
 
-      // 检查每条评价
-      queryResult = await context.app.service("users").find({
-        query: {
-          publicKey: assessment.publicKey
-        }
-      });
-      if (queryResult.total === 0) {
-        throw new Error(
-          `Public address of assessment: ${assessment._id} is invalid.`
-        );
-      } else {
-        // 检查实际签名用户的角色
-        const user = queryResult.data[0];
-        if (user.role !== "supervisor" && user.role !== "teacher") {
-          throw new Error(`Signer of assessment: ${assessment._id} is invalid`);
-        }
-      }
-
-      // 检查是否被篡改
-      const currenthash = Verify.hash(
-        assessment.publicKey,
-        assessment.teacherName,
-        assessment.studentName,
-        assessment.contents
-      );
-      if (hash !== currenthash) {
-        throw new Error(
-          `Data of assessment: ${assessment._id} had been tampered`
-        );
-      }
-
-      if (!Verify.verifySignature(publicKey, signature, hash)) {
-        throw new Error(`Signature of ${assessment._id} is invaild.`);
-      }
-    });
+    //检查每条评价
 
     context.data = {
       hash,

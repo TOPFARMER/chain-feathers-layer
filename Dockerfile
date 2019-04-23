@@ -13,4 +13,4 @@ EXPOSE 3030
 RUN apk add bash
 RUN npm install
 
-CMD ./wait-for mongo:27017 -t 20 -- npm start
+CMD ./wait-for mongodb:27017 -q -t 20 -- npm start

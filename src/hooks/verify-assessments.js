@@ -6,7 +6,7 @@ const Verify = require("../utils/verify");
 // eslint-disable-next-line no-unused-vars
 module.exports = function(options = {}) {
   return async context => {
-    if (context.method === "update") {
+    if (context.method === "update" || context.method === "remove") {
       const queryResult = await context.app.service("assessments").find({
         query: {
           _id: context.id

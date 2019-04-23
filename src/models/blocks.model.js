@@ -6,7 +6,7 @@ module.exports = function(app) {
   const mongooseClient = app.get("mongooseClient");
   const { Schema } = mongooseClient;
   const blocks = new Schema({
-    timestamps: { type: String, required: true },
+    timestamp: { type: String, unique: true, required: true },
     lastHash: String,
     hash: String,
     assessments: String,
