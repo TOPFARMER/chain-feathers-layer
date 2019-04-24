@@ -38,10 +38,14 @@ module.exports = function(options = {}) {
     const startTime = Date.now();
     let { hash, publicKey, signature, assessments, timestamp } = context.data;
 
-    if (!(assessments instanceof Array) || assessments.length === 0) {
-      throw new Error(
-        "Assessments should be a string array and can not be empty!"
-      );
+    const assessmentsArr = JSON.parse(assessments);
+
+    if (!(assessmentsArr instanceof Array)) {
+      throw new Error("Assessments should be a string array");
+    }
+
+    if (assessmentsArr.length === 0) {
+      throw new Error("Assessments can not be empty!");
     }
 
     // 检查HTTP请求用户的角色
@@ -81,7 +85,6 @@ module.exports = function(options = {}) {
     }
 
     // 检查每一条评价
-    const assessmentsArr = JSON.parse(assessments);
 
     await Promise.all(
       assessmentsArr.map(async assessment => {
@@ -151,6 +154,11 @@ module.exports = function(options = {}) {
         if (!Verify.verifySignature(publicKey, signature, hash)) {
           throw new Error(`Signature of ${assessment._id} is invaild.`);
         }
+
+        // 先锁住评价，以防重复上链
+        await context.app
+          .service("assessments")
+          ._patch(assessment._id, { isSignedBySup: true });
       })
     );
 

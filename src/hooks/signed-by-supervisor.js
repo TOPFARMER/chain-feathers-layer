@@ -4,12 +4,7 @@
 // eslint-disable-next-line no-unused-vars
 module.exports = function(options = {}) {
   return async context => {
-    const assessmentsArr = JSON.parse(context.data.assessments);
-    assessmentsArr.forEach(async assessment => {
-      await context.app
-        .service("assessments")
-        ._patch(assessment._id, { isSignedBySup: true });
-    });
+      
 
     return context;
   };

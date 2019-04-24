@@ -81,7 +81,7 @@ class Client {
     try {
       let result = await Promise.all(
         Object.values(this.sockets).map(socket =>
-          this.sendAndWaitForResponse(socket, data, 1000)
+          this.sendAndWaitForResponse(socket, data, 2000)
         )
       );
       return result;
@@ -100,7 +100,7 @@ class Client {
           socket.send(data);
         }),
         new Promise(resolve => {
-          setTimeout(() => resolve(null), ms);
+          setTimeout(() => resolve(`Timeout: ${ms} ms`), ms);
         })
       ]);
     } catch (err) {

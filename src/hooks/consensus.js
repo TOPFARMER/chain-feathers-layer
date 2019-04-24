@@ -33,10 +33,18 @@ module.exports = function(options = {}) {
       }
       if (!block) throw new Error("延时等待一轮视图转换，未实现");
       context.data = block;
-      return context;
     } catch (err) {
-      console.log(`Error occur when hooks consensus :${err}`);
-      throw new Error(err);
+      // 失败后重置评价
+      const assessmentsArr = JSON.parse(assessments);
+      await Promise.all(
+        assessmentsArr.map(async assessment => {
+          await context.app
+            .service("assessments")
+            ._patch(assessment._id, { isSignedBySup: false });
+        })
+      );
+      throw new Error(`Error occur when hooks consensus :${err}`);
     }
+    return context;
   };
 };

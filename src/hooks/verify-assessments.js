@@ -23,6 +23,10 @@ module.exports = function(options = {}) {
           );
         }
       }
+
+      if(context.method === "remove") {
+        return context;
+      }
     }
 
     let isSignedByTchr = false;
